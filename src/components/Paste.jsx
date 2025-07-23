@@ -64,7 +64,7 @@ const Paste = () => {
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-7 w-7 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536M9 13l6.536-6.536a2 2 0 112.828 2.828L11.828 15.828a2 2 0 01-2.828 0L9 13zm0 0V17h4" />
                     </svg>
-                    <a href={`/?pasteId=${paste?._id}`}>Edit</a>
+                    <a href={`/Paste_App/?pasteId=${paste?._id}`}>Edit</a>
                   </button>
 
                   <button className="p-2 rounded-[0.2rem] bg-white border border-[#c7c7c7] hover:bg-transparent group hover:border-blue-500 flex items-center gap-2">
@@ -72,7 +72,7 @@ const Paste = () => {
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M1.5 12s3.5-7 10.5-7 10.5 7 10.5 7-3.5 7-10.5 7S1.5 12 1.5 12z" />
                       <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth={2} fill="none" />
                     </svg>
-                    <a href={`/pastes/${paste?._id}`}>View</a>
+                    <a href={`/Paste_App/pastes/${paste?._id}`}>View</a>
                   </button>
 
                   <button
@@ -103,7 +103,7 @@ const Paste = () => {
                   <button
                     className="p-2 rounded-[0.2rem] bg-white border border-[#c7c7c7] hover:bg-transparent group hover:border-blue-500 flex items-center gap-2"
                     onClick={() => {
-                      const url = `${window.location.origin}/pastes/${paste?._id}`;
+                      const url = `${window.location.origin}/Paste_App/pastes/${paste?._id}`;
                       navigator.clipboard.writeText(url);
                       toast.success("Share URL copied!");
                     }}
