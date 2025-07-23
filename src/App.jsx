@@ -10,7 +10,7 @@ import Home from './components/Home'
 const router=createBrowserRouter(
   [
     {
-      path:"/",
+      path:"/Paste_App",
       element:
       <div>
         <Navbar />
@@ -20,7 +20,7 @@ const router=createBrowserRouter(
     },
 
     {
-      path:"/pastes",
+      path:"/Paste_App/pastes",
       element:
       <div>
         <Navbar />
@@ -30,7 +30,7 @@ const router=createBrowserRouter(
     },
 
     {
-      path:"/pastes/:id",
+      path:"/Paste_App/pastes/:id",
       element:
       <div>
         <Navbar />
