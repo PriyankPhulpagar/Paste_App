@@ -5,7 +5,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToPastes, updateToPastes } from '../redux/PasteSlice';
 
 const Viewpaste = () => {
-  const { id } = useParams();
+    const params = useParams();
+  const[searchParams,setSearchParam]=useSearchParams();
+  const id=params.id;
   const allpastes = useSelector((state) => state.paste.pastes);
 
   const paste = allpastes.find((p) => p._id === id);
@@ -90,3 +92,4 @@ return (
 }
 
 export default Viewpaste
+
