@@ -1,84 +1,66 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+// src/components/Edit.jsx
+
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams, NavLink } from 'react-router-dom';
 import axios from 'axios';
-import './home.css'; // Reuse Home page CSS
+import 'home.css'; // Reuse same styles
 
 const EditPaste = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const BASE_URL = 'https://paste-app1.onrender.com/api';
+  const [value, setValue] = useState('');
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPaste = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/${id}`);
-        if (res.data.success) {
-          setTitle(res.data.paste.Title);
-          setContent(res.data.paste.Content);
-        } else {
-          alert('Paste not found');
-          navigate('/pastes');
-        }
-      } catch (err) {
-        console.error(err);
-        alert('Failed to load paste');
-        navigate('/pastes');
-      }
-    };
-
-    fetchPaste();
-  }, [id, navigate]);
+    axios.get(`https://pasteappserver.vercel.app/api/pastes/${id}`)
+      .then(res => {
+        setTitle(res.data.Title);
+        setValue(res.data.Content);
+      })
+      .catch(err => {
+        console.error("Failed to fetch paste:", err);
+      });
+  }, [id]);
 
   const handleUpdate = async () => {
     try {
-      const res = await axios.put(`${BASE_URL}/update/${id}`, {
+      await axios.put(`https://pasteappserver.vercel.app/api/pastes/${id}`, {
         Title: title,
-        Content: content,
+        Content: value
       });
-
-      if (res.data.success) {
-        alert('Paste updated successfully!');
-        navigate('/');
-      }
+      setTitle('');
+      setValue('');
+      navigate('/'); // Go back to Home after update
     } catch (err) {
-      console.error(err);
-      alert('Failed to update paste');
+      console.error("Update failed:", err);
     }
   };
 
   return (
     <div className="home-wrapper">
-      <nav className="nav">
-        <a href="/" className="nav-link">Home</a>
-        <a href="/pastes" className="nav-link">Pastes</a>
-      </nav>
+      <div className="nav">
+        <NavLink className="nav-link" to="/">Home</NavLink>
+        <NavLink className="nav-link" to="/pastes">All Pastes</NavLink>
+      </div>
 
       <div className="input-row">
         <input
           type="text"
+          className="title-box"
           placeholder="Enter title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          className="title-box"
         />
+        <button className="create-button" onClick={handleUpdate}>Update Paste</button>
       </div>
 
-      <div className="input-row">
-        <textarea
-          placeholder="Enter content"
-          value={content}
-          onChange={(e) => setContent(e.target.value)}
-          className="content-box"
-        />
-      </div>
-
-      <div className="input-row">
-        <button className="create-button" onClick={handleUpdate}>
-          Update Paste
-        </button>
-      </div>
+      <textarea
+        className="content-box"
+        placeholder="Enter content"
+        rows={10}
+        value={value}
+        onChange={(e) => setValue(e.target.value)}
+      />
     </div>
   );
 };
