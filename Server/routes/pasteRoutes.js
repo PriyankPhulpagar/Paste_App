@@ -9,10 +9,11 @@ const {
 } = require('../controller/pasteController');
 
 // CRUD Routes
-router.get('/all', getAllPastes);
-router.get('/paste/:id', getPasteById);
-router.post('/create', createPaste);
-router.put('/update/:id', updatePaste);
-router.delete('/delete/:id', deletePaste);
+router.get('/pastes', getAllPastes);        // GET all
+router.get('/pastes/:id', getPasteById);    // GET one
+router.post('/pastes', createPaste);        // POST new
+router.put('/pastes/:id', updatePaste);     // PUT update
+router.delete('/pastes/:id', deletePaste);  // DELETE
+
 
 module.exports = router;
