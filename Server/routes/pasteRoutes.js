@@ -11,7 +11,7 @@ const {
 // Base path: /api
 
 // GET all pastes
-router.get('/all', getAllPastes);
+router.get('/pastes', getAllPastes);
 
 // GET single paste by ID
 router.get('/:id', getPasteById);
