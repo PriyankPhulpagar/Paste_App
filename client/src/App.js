@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Pastes from './components/Pastes';
 import PasteView from './components/Pasteview';
+import EditPaste from './components/EditPaste'; // ✅ Add this line
 
 function App() {
   return (
@@ -11,9 +12,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/pastes" element={<Pastes />} />
-        <Route path="/edit/:id" element={<Home />} />
+        <Route path="/edit/:id" element={<EditPaste />} /> {/* ✅ Updated route */}
         <Route path="/pastes/:id" element={<PasteView />} />
-
       </Routes>
     </Router>
   );
