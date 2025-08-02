@@ -3,41 +3,51 @@ import { useParams } from 'react-router-dom';
 import axios from 'axios';
 import './pasteview.css';
 
-const PasteView = () => {
+const Pasteview = () => {
   const { id } = useParams();
   const [paste, setPaste] = useState(null);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(true);
 
   const BASE_URL = 'https://paste-app1.onrender.com/api';
 
   useEffect(() => {
-    fetchPaste();
-  }, []);
-
-  const fetchPaste = async () => {
-    try {
-      const res = await axios.get(`${BASE_URL}/paste/${id}`);
-      if (res.data.success) {
-        setPaste(res.data.paste);
-      } else {
-        setError('Paste not found');
+    const fetchPaste = async () => {
+      try {
+        const res = await axios.get(`${BASE_URL}/${id}`);
+        if (res.data.success) {
+          setPaste(res.data.paste);
+        } else {
+          setError('Paste not found');
+        }
+      } catch (err) {
+        console.error('Error fetching paste:', err);
+        setError('Failed to fetch paste. It may not exist or the server is unreachable.');
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError('Paste not found or error occurred');
-      console.error(err);
-    }
-  };
+    };
 
-  if (error) return <div className="paste-view-wrapper"><h2>{error}</h2></div>;
-  if (!paste) return <div className="paste-view-wrapper"><h2>Loading...</h2></div>;
+    fetchPaste();
+  }, [id]);
+
+  if (loading) {
+    return <div className="pasteview-wrapper">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="pasteview-wrapper error">{error}</div>;
+  }
 
   return (
-    <div className="paste-view-wrapper">
-      <h1 className="paste-heading">{paste.Title}</h1>
-      <p className="paste-content">{paste.Content}</p>
-      <p className="paste-date">Created: {new Date(paste.createdAt).toLocaleString()}</p>
+    <div className="pasteview-wrapper">
+      <h1 className="paste-title">{paste.Title}</h1>
+      <div className="paste-content">{paste.Content}</div>
+      <div className="paste-date">
+        Created: {new Date(paste.createdAt).toLocaleString()}
+      </div>
     </div>
   );
 };
 
-export default PasteView;
+export default Pasteview;
