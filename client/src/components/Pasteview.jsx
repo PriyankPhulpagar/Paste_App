@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from 'axios';
+import './pasteview.css'; // Keep this line to apply external CSS
 
 const Pasteview = () => {
   const { id } = useParams();
@@ -30,67 +31,22 @@ const Pasteview = () => {
     fetchPaste();
   }, [id]);
 
+  if (loading) {
+    return <div className="paste-view-wrapper">Loading...</div>;
+  }
+
+  if (error) {
+    return <div className="paste-view-wrapper error">{error}</div>;
+  }
+
   return (
-    <>
-      <style>{`
-        body {
-          margin: 0;
-          padding: 0;
-          height: 100vh;
-          background-color: #021f3f;
-          color: white;
-          font-family: 'Segoe UI', sans-serif;
-        }
-
-        .pasteview-wrapper {
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-          text-align: center;
-          padding: 20px;
-        }
-
-        .paste-title {
-          font-size: 4rem;
-          font-weight: bold;
-          margin-bottom: 1.2rem;
-        }
-
-        .paste-content {
-          font-size: 1.7rem;
-          max-width: 1000px;
-          white-space: pre-wrap;
-          margin-bottom: 1rem;
-        }
-
-        .paste-date {
-          font-size: 1.2rem;
-          color: #cccccc;
-        }
-
-        .error {
-          color: red;
-        }
-      `}</style>
-
-      <div className="pasteview-wrapper">
-        {loading ? (
-          <div>Loading...</div>
-        ) : error ? (
-          <div className="error">{error}</div>
-        ) : (
-          <>
-            <h1 className="paste-title">{paste.Title}</h1>
-            <div className="paste-content">{paste.Content}</div>
-            <div className="paste-date">
-              Created: {new Date(paste.createdAt).toLocaleString()}
-            </div>
-          </>
-        )}
+    <div className="paste-view-wrapper">
+      <h1 className="paste-heading">{paste.Title}</h1>
+      <div className="paste-content">{paste.Content}</div>
+      <div className="paste-date">
+        Created: {new Date(paste.createdAt).toLocaleString()}
       </div>
-    </>
+    </div>
   );
 };
 
