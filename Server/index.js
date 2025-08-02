@@ -8,21 +8,22 @@ const cors = require('cors');
 dotenv.config();
 const app = express();
 
-// ✅ Enable CORS for your frontend (port 3001)
+// ✅ Enable CORS for deployed frontend
 app.use(cors({
-  origin: ['http://localhost:3001'],
+  origin: ['https://pasteapp-two.vercel.app'], // your Vercel frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
   credentials: true,
 }));
 
 // ✅ Parse incoming JSON
 app.use(express.json());
 
-// ✅ Set Content Security Policy headers
+// ✅ Set Content Security Policy headers (optional but okay to keep)
 app.use((req, res, next) => {
   res.setHeader(
     "Content-Security-Policy",
     "default-src 'self'; " +
-    "connect-src 'self' http://localhost:3001; " +
+    "connect-src 'self' https://pasteapp-two.vercel.app; " +
     "font-src 'self' https://fonts.gstatic.com; " +
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
     "style-src-elem 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com; " +
