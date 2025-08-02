@@ -11,11 +11,13 @@ const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  const BASE_URL = 'https://paste-app1.onrender.com/api';
+
   // Detect mode on mount or when location changes
   useEffect(() => {
     if (id) {
       setIsEdit(true);
-      axios.get(`http://localhost:3000/api/paste/${id}`)
+      axios.get(`${BASE_URL}/paste/${id}`)
         .then(res => {
           if (res.data.success) {
             setTitle(res.data.paste.Title);
@@ -40,7 +42,7 @@ const Home = () => {
 
     try {
       if (isEdit) {
-        const response = await axios.put(`http://localhost:3000/api/update/${id}`, {
+        const response = await axios.put(`${BASE_URL}/update/${id}`, {
           Title: title,
           Content: content,
         });
@@ -52,7 +54,7 @@ const Home = () => {
           alert('Failed to update');
         }
       } else {
-        const response = await axios.post('http://localhost:3000/api/create', {
+        const response = await axios.post(`${BASE_URL}/create`, {
           Title: title,
           Content: content,
         });

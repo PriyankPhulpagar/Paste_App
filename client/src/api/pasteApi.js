@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:3000/api';
+const BASE_URL = 'https://paste-app1.onrender.com/api';
 
 // Create Paste
 export const createPaste = async (title, content) => {
@@ -14,7 +14,7 @@ export const fetchPastes = async () => {
   return res.data;
 };
 
-// ✅ Fetch a single paste by ID
+// Fetch a single paste by ID
 export const fetchPasteById = async (id) => {
   const res = await axios.get(`${BASE_URL}/paste/${id}`);
   return res.data;

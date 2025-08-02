@@ -9,13 +9,15 @@ const Pastes = () => {
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
+  const BASE_URL = 'https://paste-app1.onrender.com/api';
+
   useEffect(() => {
     fetchPastes();
   }, []);
 
   const fetchPastes = async () => {
     try {
-      const res = await axios.get('http://localhost:3000/api/all');
+      const res = await axios.get(`${BASE_URL}/all`);
       if (res.data.success) {
         setPastes(res.data.pastes);
       }
@@ -27,7 +29,7 @@ const Pastes = () => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/delete/${id}`);
+      await axios.delete(`${BASE_URL}/delete/${id}`);
       alert('Paste deleted');
       fetchPastes(); // refresh list
     } catch (err) {

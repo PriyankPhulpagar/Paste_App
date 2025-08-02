@@ -8,13 +8,15 @@ const PasteView = () => {
   const [paste, setPaste] = useState(null);
   const [error, setError] = useState('');
 
+  const BASE_URL = 'https://paste-app1.onrender.com/api';
+
   useEffect(() => {
     fetchPaste();
   }, []);
 
   const fetchPaste = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/paste/${id}`);
+      const res = await axios.get(`${BASE_URL}/paste/${id}`);
       if (res.data.success) {
         setPaste(res.data.paste);
       } else {
