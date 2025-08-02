@@ -1,0 +1,41 @@
+/* Make sure body fills the screen and has dark background */
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background-color: #021f3f;
+  color: white;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* Wrapper that centers everything */
+.paste-view-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;  /* center vertically */
+  align-items: center;      /* center horizontally */
+  height: 100vh;
+  text-align: center;
+  padding: 20px;
+}
+
+/* Styling for Title */
+.paste-heading {
+  font-size: 4rem;
+  font-weight: bold;
+  margin-bottom: 1.2rem;
+}
+
+/* Styling for Content */
+.paste-content {
+  font-size: 1.7rem;
+  max-width: 1000px;
+  white-space: pre-wrap;
+  margin-bottom: 1rem;
+}
+
+/* Styling for Date */
+.paste-date {
+  font-size: 1.2rem;
+  color: #cccccc;
+}

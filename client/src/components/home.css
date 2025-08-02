@@ -1,0 +1,69 @@
+.home-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #022b40;
+  color: white;
+  min-height: 100vh;
+  padding: 30px 20px;
+  gap: 30px;
+}
+
+.nav {
+  display: flex;
+  gap: 40px;
+  flex-wrap: wrap; /* Responsive: wrap links on small screens */
+  font-size: clamp(16px, 2vw, 20px); /* Responsive font */
+  justify-content: center; /* Centered alignment on all sizes */
+}
+
+.nav-link {
+  text-decoration: none;
+  color: #3b82f6;
+  font-weight: bold;
+}
+
+.input-row {
+  display: flex;
+  gap: 20px;
+  width: 100%;
+  max-width: 800px; /* Responsive width cap */
+  flex-wrap: wrap; /* Wraps input and button on smaller screens */
+  justify-content: center;
+}
+
+.title-box {
+  flex: 1;
+  padding: 10px;
+  font-size: clamp(14px, 1.5vw, 16px); /* Responsive font */
+  background-color: #1e1e1e;
+  border: none;
+  color: white;
+  border-radius: 20px;
+  min-width: 200px;
+  box-sizing: border-box;
+}
+
+.create-button {
+  background-color: #3b82f6;
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+  font-size: clamp(14px, 1.4vw, 16px); /* Responsive font */
+  min-width: 120px;
+}
+
+.content-box {
+  width: 70vw;
+  max-width: 800px; /* Limit on large screens */
+  padding: 15px;
+  font-size: clamp(14px, 1.5vw, 16px); /* Responsive font */
+  background-color: #1e1e1e;
+  color: white;
+  border: none;
+  border-radius: 20px;
+  box-sizing: border-box;
+}
