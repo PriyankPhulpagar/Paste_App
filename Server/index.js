@@ -43,7 +43,7 @@ app.get('/', (req, res) => {
 });
 
 // ✅ Start the server
-const port = process.env.PORT || 3000;
-app.listen(port, () => {
-  console.log(`Paste app listening on port ${port}`);
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Paste app listening on port ${PORT}`);
 });
