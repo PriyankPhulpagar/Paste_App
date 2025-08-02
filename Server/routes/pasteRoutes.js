@@ -8,12 +8,21 @@ const {
   deletePaste,
 } = require('../controller/pasteController');
 
-// CRUD Routes
-router.get('/pastes', getAllPastes);        // GET all
-router.get('/pastes/:id', getPasteById);    // GET one
-router.post('/pastes', createPaste);        // POST new
-router.put('/pastes/:id', updatePaste);     // PUT update
-router.delete('/pastes/:id', deletePaste);  // DELETE
+// Base path: /api
 
+// GET all pastes
+router.get('/all', getAllPastes);
+
+// GET single paste by ID
+router.get('/:id', getPasteById);
+
+// POST new paste
+router.post('/create', createPaste);
+
+// PUT update paste
+router.put('/update/:id', updatePaste);
+
+// DELETE paste
+router.delete('/delete/:id', deletePaste);
 
 module.exports = router;
