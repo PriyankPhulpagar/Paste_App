@@ -17,7 +17,7 @@ const Pastes = () => {
 
   const fetchPastes = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/all`);
+      const res = await axios.get(`${BASE_URL}/pastes`);
       if (res.data.success) {
         setPastes(res.data.pastes);
       }
