@@ -15,29 +15,52 @@ const EditPaste = () => {
 
   useEffect(() => {
 
-    axios.get(`${BASE_URL}/${id}`)
-      .then(res => {
+    const fetchPaste = async () => {
 
-        setTitle(res.data.Title);
-        setContent(res.data.Content);
+      try {
 
-      });
+        const res = await axios.get(`${BASE_URL}/pastes/${id}`);
+
+        if (res.data.success) {
+
+          setTitle(res.data.paste.Title);
+          setContent(res.data.paste.Content);
+
+        }
+
+      } catch (err) {
+
+        console.log(err);
+
+      }
+
+    };
+
+    fetchPaste();
 
   }, [id]);
 
 
   const updatePaste = async () => {
 
-    await axios.put(`${BASE_URL}/update/${id}`, {
+    try {
 
-      Title: title,
-      Content: content
+      await axios.put(`${BASE_URL}/pastes/update/${id}`, {
 
-    });
+        Title: title,
+        Content: content
 
-    alert("Updated");
+      });
 
-    navigate("/pastes");
+      alert("Updated");
+
+      navigate("/pastes");
+
+    } catch (err) {
+
+      alert("Update failed");
+
+    }
 
   };
 
@@ -46,15 +69,9 @@ const EditPaste = () => {
 
     <div>
 
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-      />
+      <input value={title} onChange={(e)=>setTitle(e.target.value)} />
 
-      <textarea
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
+      <textarea value={content} onChange={(e)=>setContent(e.target.value)} />
 
       <button onClick={updatePaste}>
         Update

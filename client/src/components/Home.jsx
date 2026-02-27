@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './home.css';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import BASE_URL from '../api/config';
 
 const Home = () => {
@@ -12,9 +12,7 @@ const Home = () => {
 
   const { id } = useParams();
   const navigate = useNavigate();
-  const location = useLocation();
 
-  // ✅ FIXED: correct response handling
   useEffect(() => {
 
     const fetchPaste = async () => {
@@ -25,7 +23,7 @@ const Home = () => {
 
           setIsEdit(true);
 
-          const res = await axios.get(`${BASE_URL}/${id}`);
+          const res = await axios.get(`${BASE_URL}/pastes/${id}`);
 
           if (res.data.success) {
 
@@ -34,18 +32,12 @@ const Home = () => {
 
           }
 
-        } catch (error) {
+        } catch (err) {
 
-          console.log("Fetch error:", error);
-          alert("Failed to load paste");
+          console.log(err);
+          alert("Failed to fetch paste");
 
         }
-
-      } else {
-
-        setIsEdit(false);
-        setTitle('');
-        setContent('');
 
       }
 
@@ -53,51 +45,53 @@ const Home = () => {
 
     fetchPaste();
 
-  }, [id, location.key]);
+  }, [id]);
 
 
-  // ✅ FIXED submit logic
   const handleSubmit = async (e) => {
 
     e.preventDefault();
 
+    if (!title || !content) {
+
+      alert("Fill all fields");
+      return;
+
+    }
+
     try {
-
-      if (!title || !content) {
-
-        alert("Please fill all fields");
-        return;
-
-      }
 
       if (isEdit) {
 
-        await axios.put(`${BASE_URL}/update/${id}`, {
+        await axios.put(`${BASE_URL}/pastes/update/${id}`, {
+
           Title: title,
           Content: content
+
         });
 
-        alert("Paste Updated Successfully");
-
-        navigate("/pastes");
+        alert("Updated successfully");
 
       } else {
 
-        await axios.post(`${BASE_URL}/create`, {
+        await axios.post(`${BASE_URL}/pastes/create`, {
+
           Title: title,
           Content: content
+
         });
 
-        alert("Paste Created Successfully");
-
-        setTitle('');
-        setContent('');
+        alert("Created successfully");
 
       }
 
-    } catch (error) {
+      setTitle('');
+      setContent('');
+      navigate("/pastes");
 
-      console.log("Submit error:", error);
+    } catch (err) {
+
+      console.log(err.response?.data || err.message);
       alert("Operation failed");
 
     }
@@ -110,33 +104,35 @@ const Home = () => {
     <div className="home-wrapper">
 
       <nav className="nav">
-        <a href="/" className="nav-link">Home</a>
-        <a href="/pastes" className="nav-link">Pastes</a>
+
+        <button onClick={() => navigate("/")}>Home</button>
+        <button onClick={() => navigate("/pastes")}>Pastes</button>
+
       </nav>
 
-      <form onSubmit={handleSubmit} className="input-row">
+      <form onSubmit={handleSubmit}>
 
         <input
           className="title-box"
-          type="text"
-          placeholder="Enter title"
           value={title}
+          placeholder="Enter title"
           onChange={(e) => setTitle(e.target.value)}
         />
 
-        <button type="submit" className="create-button">
+        <textarea
+          className="content-box"
+          value={content}
+          placeholder="Enter content"
+          onChange={(e) => setContent(e.target.value)}
+        />
+
+        <button className="create-button">
+
           {isEdit ? "Update Paste" : "Create Paste"}
+
         </button>
 
       </form>
-
-      <textarea
-        className="content-box"
-        rows={15}
-        placeholder="Enter content"
-        value={content}
-        onChange={(e) => setContent(e.target.value)}
-      />
 
     </div>
 
