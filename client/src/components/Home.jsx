@@ -14,33 +14,61 @@ const Home = () => {
   const navigate = useNavigate();
   const location = useLocation();
 
+  // ✅ FIXED: correct response handling
   useEffect(() => {
 
-    if (id) {
-      setIsEdit(true);
+    const fetchPaste = async () => {
 
-      axios.get(`${BASE_URL}/${id}`)
-        .then(res => {
-          setTitle(res.data.Title);
-          setContent(res.data.Content);
-        })
-        .catch(err => console.log(err));
+      if (id) {
 
-    } else {
-      setIsEdit(false);
-      setTitle('');
-      setContent('');
-    }
+        try {
+
+          setIsEdit(true);
+
+          const res = await axios.get(`${BASE_URL}/${id}`);
+
+          if (res.data.success) {
+
+            setTitle(res.data.paste.Title);
+            setContent(res.data.paste.Content);
+
+          }
+
+        } catch (error) {
+
+          console.log("Fetch error:", error);
+          alert("Failed to load paste");
+
+        }
+
+      } else {
+
+        setIsEdit(false);
+        setTitle('');
+        setContent('');
+
+      }
+
+    };
+
+    fetchPaste();
 
   }, [id, location.key]);
 
 
-
+  // ✅ FIXED submit logic
   const handleSubmit = async (e) => {
 
     e.preventDefault();
 
     try {
+
+      if (!title || !content) {
+
+        alert("Please fill all fields");
+        return;
+
+      }
 
       if (isEdit) {
 
@@ -49,7 +77,7 @@ const Home = () => {
           Content: content
         });
 
-        alert("Paste Updated");
+        alert("Paste Updated Successfully");
 
         navigate("/pastes");
 
@@ -60,15 +88,18 @@ const Home = () => {
           Content: content
         });
 
-        alert("Paste Created");
+        alert("Paste Created Successfully");
 
         setTitle('');
         setContent('');
+
       }
 
     } catch (error) {
-      console.log(error);
-      alert("Error");
+
+      console.log("Submit error:", error);
+      alert("Operation failed");
+
     }
 
   };
@@ -83,7 +114,6 @@ const Home = () => {
         <a href="/pastes" className="nav-link">Pastes</a>
       </nav>
 
-
       <form onSubmit={handleSubmit} className="input-row">
 
         <input
@@ -94,12 +124,11 @@ const Home = () => {
           onChange={(e) => setTitle(e.target.value)}
         />
 
-        <button className="create-button">
+        <button type="submit" className="create-button">
           {isEdit ? "Update Paste" : "Create Paste"}
         </button>
 
       </form>
-
 
       <textarea
         className="content-box"
@@ -110,7 +139,9 @@ const Home = () => {
       />
 
     </div>
+
   );
+
 };
 
 export default Home;

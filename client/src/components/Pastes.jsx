@@ -11,71 +11,62 @@ const Pastes = () => {
   const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
-
   useEffect(() => {
     fetchPastes();
   }, []);
 
-
+  // ✅ FIXED: correct endpoint and correct data extraction
   const fetchPastes = async () => {
-
     try {
 
-      const res = await axios.get(BASE_URL);
+      const res = await axios.get(`${BASE_URL}/pastes`);
 
-      setPastes(res.data);
+      if (res.data.success) {
+        setPastes(res.data.pastes);
+      } else {
+        setPastes([]);
+      }
 
     } catch (error) {
-
-      console.log(error);
-
+      console.log("Fetch error:", error);
+      setPastes([]);
     }
-
   };
 
-
+  // ✅ DELETE FIXED
   const handleDelete = async (id) => {
+    try {
 
-    await axios.delete(`${BASE_URL}/delete/${id}`);
+      await axios.delete(`${BASE_URL}/delete/${id}`);
 
-    alert("Deleted");
+      alert("Deleted successfully");
 
-    fetchPastes();
+      fetchPastes();
 
+    } catch (error) {
+      console.log(error);
+      alert("Delete failed");
+    }
   };
-
 
   const handleCopy = (content) => {
-
     navigator.clipboard.writeText(content);
-
     alert("Copied");
-
   };
-
 
   const handleShare = (id) => {
-
     const link = `${window.location.origin}/pastes/${id}`;
-
     navigator.clipboard.writeText(link);
-
     alert("Link Copied");
-
   };
-
 
   const handleEdit = (id) => {
-
     navigate(`/edit/${id}`);
-
   };
 
-
   const filtered = pastes.filter(p =>
-    p.Title.toLowerCase().includes(search.toLowerCase())
+    p.Title?.toLowerCase().includes(search.toLowerCase())
   );
-
 
   return (
 
@@ -86,7 +77,6 @@ const Pastes = () => {
         <a href="/pastes" className="nav-link">Pastes</a>
       </nav>
 
-
       <input
         className="search-bar"
         placeholder="Search"
@@ -94,40 +84,43 @@ const Pastes = () => {
         onChange={(e) => setSearch(e.target.value)}
       />
 
+      {filtered.length === 0 ? (
+        <p style={{textAlign:'center'}}>No pastes found</p>
+      ) : (
 
-      {filtered.map(paste => (
+        filtered.map(paste => (
 
-        <div className="paste-card" key={paste._id}>
+          <div className="paste-card" key={paste._id}>
 
-          <h3>{paste.Title}</h3>
+            <h3>{paste.Title}</h3>
 
-          <p>{paste.Content}</p>
+            <p>{paste.Content}</p>
 
+            <div className="button-row">
 
-          <div className="button-row">
+              <button onClick={() => handleEdit(paste._id)}>
+                <FaEdit /> Edit
+              </button>
 
-            <button onClick={() => handleEdit(paste._id)}>
-              <FaEdit /> Edit
-            </button>
+              <button onClick={() => handleDelete(paste._id)}>
+                <FaTrash /> Delete
+              </button>
 
-            <button onClick={() => handleDelete(paste._id)}>
-              <FaTrash /> Delete
-            </button>
+              <button onClick={() => handleCopy(paste.Content)}>
+                <FaCopy /> Copy
+              </button>
 
-            <button onClick={() => handleCopy(paste.Content)}>
-              <FaCopy /> Copy
-            </button>
+              <button onClick={() => handleShare(paste._id)}>
+                <FaShareAlt /> Share
+              </button>
 
-            <button onClick={() => handleShare(paste._id)}>
-              <FaShareAlt /> Share
-            </button>
+            </div>
 
           </div>
 
+        ))
 
-        </div>
-
-      ))}
+      )}
 
     </div>
 
