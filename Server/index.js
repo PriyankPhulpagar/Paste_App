@@ -8,46 +8,32 @@ dotenv.config();
 
 const app = express();
 
-
-// ✅ FIXED CORS — allow localhost, vercel and render frontend
-const allowedOrigins = [
-  'http://localhost:3000',
-  'https://pasteapp-two.vercel.app'
-];
-
 app.use(cors({
-  origin: function(origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(null, true); // allow all for now (safe for development)
-    }
-  },
+  origin: true,
   credentials: true,
 }));
 
-
-// ✅ Middleware
 app.use(express.json());
 
-
-// ✅ MongoDB
 connectDB();
 
-
-// ✅ Routes
 app.use('/api', pasteRoutes);
 
-
-// ✅ Root route
 app.get('/', (req, res) => {
   res.send('Paste API Running...');
 });
 
+// error handler
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).json({
+    success: false,
+    message: err.message || "Internal Server Error"
+  });
+});
 
-// ✅ Start server
 const PORT = process.env.PORT || 5000;
 
 app.listen(PORT, () => {
-  console.log(`Paste app listening on port ${PORT}`);
+  console.log(`✅ Server running on port ${PORT}`);
 });

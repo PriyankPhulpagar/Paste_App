@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+
 const {
   getAllPastes,
   getPasteById,
@@ -8,21 +9,20 @@ const {
   deletePaste,
 } = require('../controller/pasteController');
 
-// Base path: /api
 
-// GET all pastes
+// ✅ GET all pastes
 router.get('/pastes', getAllPastes);
 
-// GET single paste by ID
-router.get('/:id', getPasteById);
+// ✅ GET paste by ID (make path clear)
+router.get('/pastes/:id', getPasteById);
 
-// POST new paste
-router.post('/create', createPaste);
+// ✅ CREATE paste
+router.post('/pastes', createPaste);
 
-// PUT update paste
-router.put('/update/:id', updatePaste);
+// ✅ UPDATE paste
+router.put('/pastes/:id', updatePaste);
 
-// DELETE paste
-router.delete('/delete/:id', deletePaste);
+// ✅ DELETE paste
+router.delete('/pastes/:id', deletePaste);
 
 module.exports = router;
