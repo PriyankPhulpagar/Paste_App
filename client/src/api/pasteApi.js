@@ -1,32 +1,31 @@
 import axios from 'axios';
-
-const BASE_URL = 'https://paste-app1.onrender.com/api';
+import BASE_URL from './config';
 
 // Create Paste
 export const createPaste = async (title, content) => {
-  const res = await axios.post(`${BASE_URL}/create`, { title, content });
+  const res = await axios.post(`${BASE_URL}/create`, { Title: title, Content: content });
   return res.data;
 };
 
 // Fetch all Pastes
 export const fetchPastes = async () => {
-  const res = await axios.get(`${BASE_URL}/all`);
+  const res = await axios.get(BASE_URL);
   return res.data;
 };
 
-// Fetch a single paste by ID
+// Fetch single paste
 export const fetchPasteById = async (id) => {
-  const res = await axios.get(`${BASE_URL}/paste/${id}`);
+  const res = await axios.get(`${BASE_URL}/${id}`);
   return res.data;
 };
 
-// Update Paste
+// Update paste
 export const updatePaste = async (id, updatedData) => {
   const res = await axios.put(`${BASE_URL}/update/${id}`, updatedData);
   return res.data;
 };
 
-// Delete Paste
+// Delete paste
 export const deletePaste = async (id) => {
   const res = await axios.delete(`${BASE_URL}/delete/${id}`);
   return res.data;

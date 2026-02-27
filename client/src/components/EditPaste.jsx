@@ -1,68 +1,69 @@
-// src/components/Edit.jsx
-
-import React, { useState, useEffect } from 'react';
-import { useNavigate, useParams, NavLink } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import 'home.css'; // Reuse same styles
+import BASE_URL from '../api/config';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EditPaste = () => {
+
   const { id } = useParams();
-  const [title, setTitle] = useState('');
-  const [value, setValue] = useState('');
+
   const navigate = useNavigate();
 
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+
+
   useEffect(() => {
-    axios.get(`https://pasteappserver.vercel.app/api/pastes/${id}`)
+
+    axios.get(`${BASE_URL}/${id}`)
       .then(res => {
+
         setTitle(res.data.Title);
-        setValue(res.data.Content);
-      })
-      .catch(err => {
-        console.error("Failed to fetch paste:", err);
+        setContent(res.data.Content);
+
       });
+
   }, [id]);
 
-  const handleUpdate = async () => {
-    try {
-      await axios.put(`https://pasteappserver.vercel.app/api/pastes/${id}`, {
-        Title: title,
-        Content: value
-      });
-      setTitle('');
-      setValue('');
-      navigate('/'); // Go back to Home after update
-    } catch (err) {
-      console.error("Update failed:", err);
-    }
+
+  const updatePaste = async () => {
+
+    await axios.put(`${BASE_URL}/update/${id}`, {
+
+      Title: title,
+      Content: content
+
+    });
+
+    alert("Updated");
+
+    navigate("/pastes");
+
   };
 
-  return (
-    <div className="home-wrapper">
-      <div className="nav">
-        <NavLink className="nav-link" to="/">Home</NavLink>
-        <NavLink className="nav-link" to="/pastes">All Pastes</NavLink>
-      </div>
 
-      <div className="input-row">
-        <input
-          type="text"
-          className="title-box"
-          placeholder="Enter title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <button className="create-button" onClick={handleUpdate}>Update Paste</button>
-      </div>
+  return (
+
+    <div>
+
+      <input
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
 
       <textarea
-        className="content-box"
-        placeholder="Enter content"
-        rows={10}
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
       />
+
+      <button onClick={updatePaste}>
+        Update
+      </button>
+
     </div>
+
   );
+
 };
 
 export default EditPaste;

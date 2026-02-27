@@ -1,53 +1,39 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import './pasteview.css'; // Keep this line to apply external CSS
+import BASE_URL from '../api/config';
+import { useParams } from 'react-router-dom';
 
 const Pasteview = () => {
-  const { id } = useParams();
-  const [paste, setPaste] = useState(null);
-  const [error, setError] = useState('');
-  const [loading, setLoading] = useState(true);
 
-  const BASE_URL = 'https://paste-app1.onrender.com/api';
+  const { id } = useParams();
+
+  const [paste, setPaste] = useState(null);
+
 
   useEffect(() => {
-    const fetchPaste = async () => {
-      try {
-        const res = await axios.get(`${BASE_URL}/${id}`);
-        if (res.data.success) {
-          setPaste(res.data.paste);
-        } else {
-          setError('Paste not found');
-        }
-      } catch (err) {
-        console.error('Error fetching paste:', err);
-        setError('Failed to fetch paste. It may not exist or the server is unreachable.');
-      } finally {
-        setLoading(false);
-      }
-    };
 
-    fetchPaste();
+    axios.get(`${BASE_URL}/${id}`)
+      .then(res => setPaste(res.data))
+      .catch(err => console.log(err));
+
   }, [id]);
 
-  if (loading) {
-    return <div className="paste-view-wrapper">Loading...</div>;
-  }
 
-  if (error) {
-    return <div className="paste-view-wrapper error">{error}</div>;
-  }
+  if (!paste) return <div>Loading...</div>;
+
 
   return (
-    <div className="paste-view-wrapper">
-      <h1 className="paste-heading">{paste.Title}</h1>
-      <div className="paste-content">{paste.Content}</div>
-      <div className="paste-date">
-        Created: {new Date(paste.createdAt).toLocaleString()}
-      </div>
+
+    <div>
+
+      <h1>{paste.Title}</h1>
+
+      <p>{paste.Content}</p>
+
     </div>
+
   );
+
 };
 
 export default Pasteview;

@@ -2,104 +2,113 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './home.css';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import BASE_URL from '../api/config';
 
 const Home = () => {
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [isEdit, setIsEdit] = useState(false);
+
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
 
-  const BASE_URL = 'https://paste-app1.onrender.com/api';
-
-  // Detect mode on mount or when location changes
   useEffect(() => {
+
     if (id) {
       setIsEdit(true);
-      axios.get(`${BASE_URL}/paste/${id}`)
+
+      axios.get(`${BASE_URL}/${id}`)
         .then(res => {
-          if (res.data.success) {
-            setTitle(res.data.paste.Title);
-            setContent(res.data.paste.Content);
-          } else {
-            alert('Paste not found');
-          }
+          setTitle(res.data.Title);
+          setContent(res.data.Content);
         })
-        .catch(err => {
-          console.error('Error fetching paste:', err);
-          alert('Server error');
-        });
+        .catch(err => console.log(err));
+
     } else {
       setIsEdit(false);
       setTitle('');
       setContent('');
     }
-  }, [id, location.key]); // <- use location.key to re-run when route changes
+
+  }, [id, location.key]);
+
+
 
   const handleSubmit = async (e) => {
+
     e.preventDefault();
 
     try {
+
       if (isEdit) {
-        const response = await axios.put(`${BASE_URL}/update/${id}`, {
+
+        await axios.put(`${BASE_URL}/update/${id}`, {
           Title: title,
-          Content: content,
+          Content: content
         });
 
-        if (response.data.success) {
-          alert('Paste updated!');
-          navigate('/'); // Return to create mode
-        } else {
-          alert('Failed to update');
-        }
+        alert("Paste Updated");
+
+        navigate("/pastes");
+
       } else {
-        const response = await axios.post(`${BASE_URL}/create`, {
+
+        await axios.post(`${BASE_URL}/create`, {
           Title: title,
-          Content: content,
+          Content: content
         });
 
-        if (response.data.success) {
-          alert('Paste created!');
-          setTitle('');
-          setContent('');
-        } else {
-          alert('Failed to create');
-        }
+        alert("Paste Created");
+
+        setTitle('');
+        setContent('');
       }
-    } catch (err) {
-      console.error('Error submitting:', err);
-      alert('Server error');
+
+    } catch (error) {
+      console.log(error);
+      alert("Error");
     }
+
   };
 
+
   return (
+
     <div className="home-wrapper">
+
       <nav className="nav">
         <a href="/" className="nav-link">Home</a>
         <a href="/pastes" className="nav-link">Pastes</a>
       </nav>
 
+
       <form onSubmit={handleSubmit} className="input-row">
+
         <input
           className="title-box"
           type="text"
+          placeholder="Enter title"
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Enter title"
         />
-        <button type="submit" className="create-button">
-          {isEdit ? 'Update Paste' : 'Create Paste'}
+
+        <button className="create-button">
+          {isEdit ? "Update Paste" : "Create Paste"}
         </button>
+
       </form>
+
 
       <textarea
         className="content-box"
-        rows={20}
+        rows={15}
+        placeholder="Enter content"
         value={content}
         onChange={(e) => setContent(e.target.value)}
-        placeholder="Enter content here"
       />
+
     </div>
   );
 };
