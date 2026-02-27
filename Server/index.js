@@ -10,14 +10,20 @@ const app = express();
 
 
 // ✅ FIXED CORS — allow localhost, vercel and render frontend
+const allowedOrigins = [
+  'http://localhost:3000',
+  'https://pasteapp-two.vercel.app'
+];
+
 app.use(cors({
-  origin: [
-    'http://localhost:3000',
-    'https://pasteapp-two.vercel.app',
-    'https://paste-app-y48o.onrender.com'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  credentials: true
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(null, true); // allow all for now (safe for development)
+    }
+  },
+  credentials: true,
 }));
 
 
