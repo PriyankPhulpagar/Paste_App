@@ -6,72 +6,59 @@ import { useParams, useNavigate } from 'react-router-dom';
 const EditPaste = () => {
 
   const { id } = useParams();
-
   const navigate = useNavigate();
 
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
 
-
   useEffect(() => {
 
-    const fetchPaste = async () => {
-
-      try {
-
-        const res = await axios.get(`${BASE_URL}/pastes/${id}`);
-
-        if (res.data.success) {
-
-          setTitle(res.data.paste.Title);
-          setContent(res.data.paste.Content);
-
-        }
-
-      } catch (err) {
-
+    axios.get(`${BASE_URL}/pastes/${id}`)
+      .then(res => {
+        setTitle(res.data.paste.Title);
+        setContent(res.data.paste.Content);
+      })
+      .catch(err => {
         console.log(err);
-
-      }
-
-    };
-
-    fetchPaste();
+        alert("Failed to load paste");
+      });
 
   }, [id]);
-
 
   const updatePaste = async () => {
 
     try {
 
-      await axios.put(`${BASE_URL}/pastes/update/${id}`, {
-
+      await axios.put(`${BASE_URL}/pastes/${id}`, {
         Title: title,
         Content: content
-
       });
 
-      alert("Updated");
-
+      alert("Updated successfully");
       navigate("/pastes");
 
     } catch (err) {
 
+      console.log(err);
       alert("Update failed");
 
     }
 
   };
 
-
   return (
 
     <div>
 
-      <input value={title} onChange={(e)=>setTitle(e.target.value)} />
+      <input
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+      />
 
-      <textarea value={content} onChange={(e)=>setContent(e.target.value)} />
+      <textarea
+        value={content}
+        onChange={(e) => setContent(e.target.value)}
+      />
 
       <button onClick={updatePaste}>
         Update

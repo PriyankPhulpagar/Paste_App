@@ -63,7 +63,7 @@ const Home = () => {
 
       if (isEdit) {
 
-        await axios.put(`${BASE_URL}/pastes/update/${id}`, {
+        await axios.put(`${BASE_URL}/pastes/${id}`, {
 
           Title: title,
           Content: content
@@ -74,7 +74,7 @@ const Home = () => {
 
       } else {
 
-        await axios.post(`${BASE_URL}/pastes/create`, {
+        await axios.post(`${BASE_URL}/pastes`, {
 
           Title: title,
           Content: content

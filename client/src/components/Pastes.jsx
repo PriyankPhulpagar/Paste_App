@@ -8,89 +8,95 @@ import BASE_URL from '../api/config';
 const Pastes = () => {
 
   const [pastes, setPastes] = useState([]);
-  const [search, setSearch] = useState('');
   const navigate = useNavigate();
 
   useEffect(() => {
+
     fetchPastes();
+
   }, []);
 
-  // ✅ FIXED: correct endpoint and correct data extraction
+
   const fetchPastes = async () => {
+
     try {
 
       const res = await axios.get(`${BASE_URL}/pastes`);
 
       if (res.data.success) {
+
         setPastes(res.data.pastes);
-      } else {
-        setPastes([]);
+
       }
 
-    } catch (error) {
-      console.log("Fetch error:", error);
-      setPastes([]);
+    } catch (err) {
+
+      console.log(err);
+
     }
+
   };
 
-  // ✅ DELETE FIXED
+
   const handleDelete = async (id) => {
+
     try {
 
-      await axios.delete(`${BASE_URL}/delete/${id}`);
+     await axios.delete(`${BASE_URL}/pastes/${id}`);
 
-      alert("Deleted successfully");
+      alert("Deleted");
 
       fetchPastes();
 
-    } catch (error) {
-      console.log(error);
+    } catch (err) {
+
+      console.log(err);
+
       alert("Delete failed");
+
     }
+
   };
 
-  const handleCopy = (content) => {
-    navigator.clipboard.writeText(content);
-    alert("Copied");
-  };
-
-  const handleShare = (id) => {
-    const link = `${window.location.origin}/pastes/${id}`;
-    navigator.clipboard.writeText(link);
-    alert("Link Copied");
-  };
 
   const handleEdit = (id) => {
+
     navigate(`/edit/${id}`);
+
   };
 
-  const filtered = pastes.filter(p =>
-    p.Title?.toLowerCase().includes(search.toLowerCase())
-  );
+
+  const handleCopy = (content) => {
+
+    navigator.clipboard.writeText(content);
+
+    alert("Copied");
+
+  };
+
+
+  const handleShare = (id) => {
+
+    const link = `${window.location.origin}/view/${id}`;
+
+    navigator.clipboard.writeText(link);
+
+    alert("Link copied");
+
+  };
+
 
   return (
 
     <div className="pastes-wrapper">
 
-      <nav className="nav">
-        <a href="/" className="nav-link">Home</a>
-        <a href="/pastes" className="nav-link">Pastes</a>
-      </nav>
+      <h1>All Pastes</h1>
 
-      <input
-        className="search-bar"
-        placeholder="Search"
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-      />
+      {
 
-      {filtered.length === 0 ? (
-        <p style={{textAlign:'center'}}>No pastes found</p>
-      ) : (
+        pastes.map(paste => (
 
-        filtered.map(paste => (
-
-          <div className="paste-card" key={paste._id}>
+          <div key={paste._id} className="paste-card">
 
             <h3>{paste.Title}</h3>
 
@@ -120,11 +126,12 @@ const Pastes = () => {
 
         ))
 
-      )}
+      }
 
     </div>
 
   );
+
 };
 
 export default Pastes;
